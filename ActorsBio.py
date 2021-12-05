@@ -38,9 +38,10 @@ for x in range(50):
     print(pythonData.get('birthPlace'))
     print(pythonData.get('miniBios')[0].get('text'))
 
-    rows.append(x, [data[0]['id'].split("/")[2], data[0]['image']['url']], data[0]['name'],
-                data[0]['gender'], bio[0]['heightCentimeters'], bio[0]['birthDate'],
-                bio[0]['birthPlace'], bio[0]['miniBios'][0]['text'])
+    rows.append([pythonData.get('id').split('/')[2], pythonData.get('image').get('url'), pythonData.get('name'),
+                pythonData.get('gender'), pythonData.get('heightCentimeters'),
+                pythonData.get('birthDate'),
+                pythonData.get('birthPlace'), pythonData.get('miniBios')[0].get('text')])
 
 df = pd.DataFrame(rows)
 df.columns = ['NameID', 'Image', 'Name', 'Gender',
