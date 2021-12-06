@@ -22,15 +22,23 @@ for i, row in df.iterrows():
     data = res.read()
     data = data.decode("utf-8")
     pythonData = json.loads(data)
-    print(pythonData.get('id').split('/')[2])
-    print(pythonData.get('base').get('name'))
-    print(pythonData.get('filmography'))
-    rows.append([pythonData.get('id').split('/')[2],
-                 pythonData.get('base').get('name'), pythonData.get('filmography')])
+    filmography = pythonData.get('filmography')
+    for film in filmography:
+        print(' ')
+        print(' ')
+        print("We are now at " + str(i))
+        print(film.get('id').split('/')[2])
+        print(film.get('title'))
+        print(film.get('titleType'))
+        if film.get('titleType') == 'movie':
+            rows.append([pythonData.get('id').split('/')[2],
+                        pythonData.get('base').get(
+                            'name'), film.get('id').split('/')[2],
+                        film.get('title'), film.get('titleType')])
 
 
 df = pd.DataFrame(rows)
-df.columns = ['NameID', 'Name', 'Filmography']
+df.columns = ['NameID', 'Name', 'TitleID', 'TitleName', 'TitleType']
 
 df.to_csv('Filmography.csv', encoding='utf-8')
 
