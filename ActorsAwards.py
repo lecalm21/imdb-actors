@@ -9,7 +9,7 @@ conn = http.client.HTTPSConnection("imdb8.p.rapidapi.com")
 
 headers = {
     'x-rapidapi-host': "imdb8.p.rapidapi.com",
-    'x-rapidapi-key': "dca6ee1f03msh0c3ce2e83fdc853p1a5fd1jsnb03748240d4a"
+    'x-rapidapi-key': "a1906b1576mshb1b515f46e72534p197b1cjsn9eb21f3e5bf3"
 }
 
 
@@ -20,21 +20,22 @@ for i, row in df.iterrows():
     conn.request("GET", "/actors/get-awards?nconst=" +
                  row['NameID'], headers=headers)
 
+    print(row['NameID'])
     res = conn.getresponse()
     data = res.read()
     data = data.decode("utf-8")
     pythonData = json.loads(data)
-    awards = pythonData.get('awards')
-    for x, award in awards:
-        print(award[x])
-        if award.get('titleType') == 'movie':
-            rows.append([pythonData.get('id').split('/')[2],
-                        pythonData.get('base').get(
-                            'name'), award.get('id').split('/')[2],
-                        award.get('title'), award.get('titleType')])
+    awards = pythonData.get('resource').get('awards')
+    #print(awards)
+    if awards:
+        for award in awards:
+            print(award.get('awardName'))
+            print(award.get('year'))
+            
+            rows.append([row['NameID'], award.get('awardName'), award.get('year')])
 
 
 df = pd.DataFrame(rows)
-df.columns = ['NameID', 'Name', 'TitleID', 'TitleName', 'TitleType']
+df.columns = ['NameID', 'AwardName', 'Year']
 
-df.to_csv('Filmography.csv', encoding='utf-8')
+df.to_csv('ActorsAwards.csv', encoding='utf-8')
