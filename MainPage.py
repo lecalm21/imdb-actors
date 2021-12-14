@@ -5,29 +5,44 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import *
 from PyQt6 import uic
 import pandas as pd
+from DetailView import DetailView 
 
 
-class MyApp(QMainWindow):
+class MainPage(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('gui.ui', self)
+        uic.loadUi('MainPage.ui', self)
         self.setWindowTitle('IMDB Database')
         self.setIconSize(QSize(800, 800))
 
 
         df = pd.read_csv('./CSVData/ActorsBio.csv')
         print(df)
-        rows = []
         for i, row in df.iterrows():
             #Put the item into the widget
-            item = QListWidgetItem()
-            item.setIcon(QIcon('./ImagesActors/' + row['NameID']))
-            item.setText(row['Name'])
-            self.listWidget.addItem(item)
-
-
+            actor = QListWidgetItem()
+            actor.setIcon(QIcon('./ImagesActors/' + row['NameID']))
+            actor.setText(row['Name'])
+            self.listWidget.addItem(actor)
             
+        self.listWidget.itemClicked.connect(self.actorClicked)
+        
+    def actorClicked(self, item):
+        #self.showMinimized()
+        self.detailView = DetailView()
+        uic.loadUi('DetailView.ui', self.detailView)
 
+        actorsBio = pd.read_csv('./CSVData/ActorsBio.csv')
+        index = self.listWidget.row(item)
+        actorInfo = actorsBio.iloc[index]
+        actorID = actorInfo['NameID']
+        imagePath = "ImagesActors/" + actorID + ".jpg"
+        actorName = actorInfo['Name']
+        actorBio = actorInfo['Bios']
+        self.detailView.initContent(imagePath, actorID, actorName, actorBio)
+        self.detailView.getGenreActor(actorID)
+        self.detailView.getFilmography(actorID)
+        self.detailView.show()
         
 
 
@@ -35,7 +50,7 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
 
-    myApp = MyApp()
+    myApp = MainPage()
     myApp.show()
 
     try:
