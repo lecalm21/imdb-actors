@@ -1,8 +1,5 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QBoxLayout, QVBoxLayout, QTableWidgetItem, QListWidgetItem, QLabel
-from PyQt6.QtCore import Qt
-from PyQt6.QtCore import QSize
+from PyQt6.QtWidgets import QMainWindow, QListWidgetItem
 from PyQt6.QtGui import *
-from PyQt6 import uic
 import pandas as pd
 
 
@@ -11,6 +8,7 @@ class DetailView(QMainWindow):
         super().__init__()
         self.setWindowTitle('IMDB Database')
     
+    # get the name the 'about' and the image of the actor and show it
     def initContent(self, image, id, name, bio):
         pixmap = QPixmap(image)
         pixmap = pixmap.scaledToWidth(160)
@@ -19,6 +17,7 @@ class DetailView(QMainWindow):
         self.bioText.setText(bio)
         
 
+    # list the genres of the actor in thze detail view
     def getGenreActor(self, id):
         filmography = pd.read_csv('./CSVData/FilmographyAnalysis.csv')
         rows = []
@@ -35,26 +34,15 @@ class DetailView(QMainWindow):
         
         self.genreLabel.setText("Genres: " + genreActorText)
 
+    # get the filmography
     def getFilmography(self, id):
         filmography = pd.read_csv('./CSVData/FilmographyAnalysis.csv')
         filmography = filmography.drop_duplicates(subset='TitleID', keep='last')
         
-        #self.filmTable.setColumnCount(5)
-        #self.filmTable.setHorizontalHeaderLabels(['ID', 'TitleName', 'Genre', 'Year', 'Rating'])
-        #self.filmTable.verticalHeader().setVisible(False)
 
         rows = []
-        #for i, row in filmography.iterrows():
-        #    if row['NameID'] == id:
-                #self.filmTable.insertRow(i)
-                #self.filmTable.setItem(i, 1, QTableWidgetItem(str(i+1)))
-                #self.filmTable.setItem(i, 1, QTableWidgetItem(str(row['TitleName'])))
-                #self.filmTable.setItem(i, 2, QTableWidgetItem(str(row['Genre'])))
-                #self.filmTable.setItem(i, 3, QTableWidgetItem(str(row['Year'])))
-                #self.filmTable.setItem(i, 4, QTableWidgetItem(str(row['Rating'])))
-        
-        #self.filmTable.resizeColumnsToContents()        
-        
+
+        # iterate through the filmography and list the movies       
         for i, row in filmography.iterrows():
             if row['NameID'] == id:
                 rows.append([row['TitleName'], row['Genre'], row['Year'], row['Rating']])
@@ -64,6 +52,7 @@ class DetailView(QMainWindow):
                 self.movieList.addItem(actor)
 
 
+        # get the top 5 movies by  rating
         ratingFrame = pd.DataFrame(rows)
         ratingFrame.columns = ['TitleName', 'Genre', 'Year', 'Rating']
         averageRating = ratingFrame['Rating'].mean()
@@ -71,6 +60,7 @@ class DetailView(QMainWindow):
 
         top5Movies = ratingFrame.sort_values(by=["Rating"], ascending=False).head(5)
 
+        # iterate through the top 5 movies to show them
         for i, row in top5Movies.iterrows():
             actor = QListWidgetItem()
             actor.setText('Title: ' + row['TitleName'] + "  " + 'Genre: ' + row['Genre'] + "  " 
@@ -78,36 +68,10 @@ class DetailView(QMainWindow):
             self.topList.addItem(actor)
 
 
-        #self.topTable.setColumnCount(5)
-        #self.topTable.setHorizontalHeaderLabels(['ID', 'TitleName', 'Genre', 'Year', 'Rating'])
-        #self.topTable.verticalHeader().setVisible(False)
-        #for i, row in top5Movies.iterrows():
-        #    self.topTable.insertRow(i)
-        #    self.topTable.setItem(i, 0, QTableWidgetItem(str(i+1)))
-        #    self.topTable.setItem(i, 1, QTableWidgetItem(str(row['TitleName'])))
-        #    self.topTable.setItem(i, 2, QTableWidgetItem(str(row['Genre'])))
-        #    self.topTable.setItem(i, 3, QTableWidgetItem(str(row['Year'])))
-        #    self.topTable.setItem(i, 4, QTableWidgetItem(str(row['Rating'])))
-
-        #self.topTable.resizeColumnsToContents()    
-
-
-
-    
+    # get the awards and show them
     def getAwards(self, id):
         awards = pd.read_csv('./CSVData/ActorsAwards.csv')
         awards = awards.drop_duplicates(subset='AwardName', keep='last')
-        
-        #self.awardsTable.setColumnCount(3)
-        #self.awardsTable.setHorizontalHeaderLabels(['ID', 'AwardName', "Year"])
-        #self.awardsTable.verticalHeader().setVisible(False)
-
-        #for i, row in awards.iterrows():
-        #    if row['NameID'] == id:
-        #        self.awardsTable.insertRow(i)
-        #        self.awardsTable.setItem(i, 0, QTableWidgetItem(str(i+1)))
-        #        self.awardsTable.setItem(i, 1, QTableWidgetItem(row['AwardName']))
-        #        self.awardsTable.setItem(i, 2, QTableWidgetItem(str(row['Year'])))
 
         for i, row in awards.iterrows():
             actor = QListWidgetItem()

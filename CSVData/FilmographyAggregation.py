@@ -1,5 +1,4 @@
 import pandas as pd
-import json
 
 film1 = pd.read_csv('FilmographyAnalysis1.csv', usecols=['NameID', 'Name', 'TitleID','TitleName', 'Genre', 'Rating', 'Year'])
 film2 = pd.read_csv('FilmographyAnalysis2.csv', usecols=['NameID', 'Name', 'TitleID','TitleName', 'Genre', 'Rating', 'Year'])
@@ -37,6 +36,9 @@ df.to_csv('FilmographyAnalysis.csv', encoding='utf-8')
 
 df = pd.read_csv('FilmographyAnalysis.csv', usecols=['NameID', 'Name', 'TitleID','TitleName', 'Genre', 'Rating', 'Year'])
 
+
+#here I aggregated the different filmography items into one csv 
+#because the api couldn´t handle all the request with one account
 for i, row in df.iterrows():
 
     rows.append(row)

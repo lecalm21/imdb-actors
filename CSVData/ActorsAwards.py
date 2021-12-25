@@ -15,24 +15,19 @@ headers = {
 
 rows = []
 
-# Here I get the awards for each actor
+# Here I get the awards for each actor and create the actor csv
 for i, row in df.iterrows():
 
     conn.request("GET", "/actors/get-awards?nconst=" +
                  row['NameID'], headers=headers)
 
-    print(row['NameID'])
     res = conn.getresponse()
     data = res.read()
     data = data.decode("utf-8")
     pythonData = json.loads(data)
     awards = pythonData.get('resource').get('awards')
-    #print(awards)
     if awards:
-        for award in awards:
-            print(award.get('awardName'))
-            print(award.get('year'))
-            
+        for award in awards:   
             rows.append([row['NameID'], award.get('awardName'), award.get('year')])
 
 

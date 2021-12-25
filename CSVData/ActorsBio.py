@@ -16,6 +16,7 @@ actors = ["/name/nm2794962/", "/name/nm4427331/", "/name/nm2180812/", "/name/nm5
 
 rows = []
 
+# Here I get the different informations for the actors and  create the actor bio csv
 for x in range(50):
     nameID = actors[x].split("/")
 

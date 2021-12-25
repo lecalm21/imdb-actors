@@ -15,6 +15,8 @@ headers = {
 
 rows = []
 
+
+# here I get the information for each film in filmography csv and create a filmography analysis csv with the rating
 for i, row in df.iterrows():
 
     conn.request(
@@ -23,11 +25,9 @@ for i, row in df.iterrows():
     res = conn.getresponse()
     data = res.read()
     data = data.decode("utf-8")
-    print("Data: " + data)
     
     pythonData = json.loads(data)
 
-    print(i)
     if pythonData.get('ratings').get('canRate'):
         rows.append([row['NameID'], row['Name'], row['TitleID'], row['TitleName'],
                     pythonData.get('genres')[0], pythonData.get(
@@ -38,7 +38,5 @@ for i, row in df.iterrows():
 df = pd.DataFrame(rows)
 df.columns = ['NameID', 'Name', 'TitleID',
               'TitleName', 'Genre', 'Rating', 'Year']
-
-print(df)
 
 df.to_csv('FilmographyAnalysis3.csv', encoding='utf-8')

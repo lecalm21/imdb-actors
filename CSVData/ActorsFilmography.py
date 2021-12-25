@@ -13,6 +13,8 @@ headers = {
 
 rows = []
 
+
+# here I get the filmography of the actors and safe it in the actors filmography
 for i, row in df.iterrows():
 
     conn.request(
