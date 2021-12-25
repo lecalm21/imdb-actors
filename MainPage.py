@@ -17,7 +17,6 @@ class MainPage(QMainWindow):
 
 
         df = pd.read_csv('./CSVData/ActorsBio.csv')
-        print(df)
         for i, row in df.iterrows():
             #Put the item into the widget
             actor = QListWidgetItem()
@@ -42,6 +41,7 @@ class MainPage(QMainWindow):
         self.detailView.initContent(imagePath, actorID, actorName, actorBio)
         self.detailView.getGenreActor(actorID)
         self.detailView.getFilmography(actorID)
+        self.detailView.getAwards(actorID)
         self.detailView.show()
         
 

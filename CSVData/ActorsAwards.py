@@ -15,6 +15,7 @@ headers = {
 
 rows = []
 
+# Here I get the awards for each actor
 for i, row in df.iterrows():
 
     conn.request("GET", "/actors/get-awards?nconst=" +
