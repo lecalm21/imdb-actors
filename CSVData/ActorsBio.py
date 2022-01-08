@@ -38,6 +38,3 @@ df.columns = ['NameID', 'Image', 'Name', 'Gender',
               'Height', 'BirthDate', 'BirthPlace', 'Bios']
 
 df.to_csv('actorsBio.csv', encoding='utf-8')
-
-
-print(df)
